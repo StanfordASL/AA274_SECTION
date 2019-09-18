@@ -12,7 +12,7 @@
 \usepackage[margin=1cm]{caption}
 \usepackage{subcaption}
 \usepackage{tcolorbox}
-
+\usepackage{color}
 \definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
 
 
@@ -28,7 +28,6 @@
     firstnumber=1,
     numberfirstline=false,
     }
-    
 \lstset{
     literate={~} {$\sim$}{1}
 }
@@ -49,7 +48,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand\headrulewidth{0.4pt}
 \setlength\headheight{15pt}
-\input{preamble}
 
 \usepackage{outlines}
 
@@ -64,7 +62,7 @@
 
 \setlength{\parindent}{0in}
 
-\title{AA 274: Principles of Robotic Autonomy \\ Section 2: ROS and Workstation}
+\title{AA 274: Principles of Robotic Autonomy \\ Section 3: Intro to Hardware and Turtlebot Setup}
 \date{}
 
 \begin{document}
@@ -73,12 +71,17 @@
 \pagestyle{fancy}
 
 Our goals for this section: \begin{enumerate}
-	\item Gain a basic understanding of the Robot Operating System (ROS) by implementing classes, nodes, and topics. Use catkin build tools and other commands to interact with ROS through the terminal.
-	\item Learn useful workstation commands.
-	\item Learn how group login accounts will work for the rest of the class. 
+	\item Familiarize with the Turtlebot hardware.
+	\item Gain basic understanding of the Turtlebot software.
+	\item Build basic tools for interacting with the Turtlebot.
 \end{enumerate}
 
-\input{sec_problem1}
-\input{sec_problem2}
+\section{The Turtlebot Hardware}
+
+\section{The Turtlebot Software}
+
+\section{Turtlebot Teleoperation}
+
+
 
 \end{document}

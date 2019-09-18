@@ -17,12 +17,9 @@ Before we jump into these, let's go over the basics of how to use ROS.
 %Add section about source /opt/ros/_/setup into ~/.bashrc.user if ROS does not come nicely pre-installed
 To start ROS, run the following command 
 
-\begin{tcolorbox}
 \begin{lstlisting}
 roscore
 \end{lstlisting}
-\end{tcolorbox}
-
 This command starts a ROS master, which is just a naming service. Any time a new node starts in the system, it will have to register with the master. Then, the master will keep track of that node until it closes. The ROS master, in turn, provides a bridge that allows nodes to communicate with each other.
 
 Running roscore will also start a few other processes including \textbf{rosout}, which is a ROS-specific stdout, and a \textbf{parameter server} that allows you to share parameters across nodes.   
@@ -31,11 +28,9 @@ What's a \textbf{node}? A node is any executable program that uses ROS to commun
 
 To list all of your running nodes, run:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 rosnode list
 \end{lstlisting}
-\end{tcolorbox}
 
 \subsection{ROS Communication}
 One way that nodes can communicate with each other is by sending \textbf{messages} over \textbf{topics}. A \textbf{message} is a strong-typed set of data, and the structure of that data is a \textbf{.msg} file. A topic is an address that nodes can either send data to or receive data from. Importantly, only one message type can be sent over a topic. 
@@ -44,22 +39,20 @@ Some standard messages are included in ROS libraries like $std_msgs$ and $geomet
 
 For example, here is the $String.msg$ file in $std_msgs$.
 
-\begin{tcolorbox}
 \begin{lstlisting}
 string data
 \end{lstlisting}
-\end{tcolorbox}
+
 
 It's a single line!
 
 Here is the $Pose.msg$ file in $geometry_msgs$.
 
-\begin{tcolorbox}
+
 \begin{lstlisting}
 geometry_msgs/Point position
 geometry_msgs/Quaternion orientation
 \end{lstlisting}
-\end{tcolorbox}
 
 Note that it references message types defined in other message files.
 
@@ -77,7 +70,7 @@ See $http://docs.ros.org/melodic/api/std_msgs/html/index-msg.html$ for the full 
 \subsection{Publishing and Subscribing}
 Now that we've created our custom message type, let's create a script that will publish a message to a topic. All our code will be in Python, using a library called $rospy$, but you can also write the same scripts in C++ using the $roscpp$ library. This script is included in the section code, but it is reproduced below.
 
-\begin{tcolorbox}
+
 \begin{lstlisting}
 import rospy
 from aa274_s2.msg import MyMessage
@@ -97,13 +90,11 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         pass
 \end{lstlisting}
-\end{tcolorbox}
 
 %TODO: Add discussion piece about this 
 
 Let's also create a script that will subscribe to the same topic and print each message it receives.
 
-\begin{tcolorbox}
 \begin{lstlisting}
 import rospy
 from aa274_s2.msg import MyMessage
@@ -119,7 +110,6 @@ def subscriber():
 if __name__ == '__main__':
     subscriber()
 \end{lstlisting}
-\end{tcolorbox}
 
 
 
@@ -133,22 +123,17 @@ The core build system used by ROS is called Catkin. When working with C code, we
 
 All of the code we write will be located inside of a catkin workspace. To initialize this workspace run:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 cd ~
 mkdir catkin_ws 
 cd catkin_ws
 catkin init
 \end{lstlisting}
-\end{tcolorbox}
-
 You will see that this creates a src folder in your directory. Now to create a new package for our code, run:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 catkin_create_pkg aa274_s2 std_msgs rospy message_generation
 \end{lstlisting}
-\end{tcolorbox}
 
 This will create a new package called aa274\_s2 in the src folder. The last three arguments are library dependencies that this package will require to run.
 
@@ -158,7 +143,6 @@ CMakeLists.txt is the most important file here, since it specifies what needs to
 
 At the bottom of this file, add the following
 
-\begin{tcolorbox}
 \begin{lstlisting}
 add_message_files(FILES MyMessage.msg)
 
@@ -167,27 +151,22 @@ generate_messages(
   std_msgs
 )
 \end{lstlisting}
-\end{tcolorbox}
 
 Without this declaration, catkin would not know to look for our custom message and any attempt to use it in another script would result in an error.
 
 Next, ensure that both of your scripts in your scripts folder are executable by running:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 chmod +x scripts/publisher.py
 chmod +x scripts/subscriber.py
 \end{lstlisting}
-\end{tcolorbox}
 
 Now, switch back into the catkin\_ws folder. You're ready to build your package. To build, run
 
-\begin{tcolorbox}
 \begin{lstlisting}
 catkin build aa274_s2
 source devel/setup.bash
 \end{lstlisting}
-\end{tcolorbox}
 
 The first command calls catkin to build our package, and the second command updates the ROS environment so that it recognizes your newly built package.
 
@@ -195,20 +174,15 @@ Note that there is another, older way of building with catkin called catkin\_mak
 
 Now, you should have a fully functional package! You can now run your scripts in one of two ways. You can directly treat them like Python scripts by switching into the scripts folder and running 
 
-\begin{tcolorbox}
 \begin{lstlisting}
 python publisher.py
 \end{lstlisting}
-\end{tcolorbox}
 
 Or, you can run your script from anywhere using the rosrun command:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 rosrun aa274_s2 publisher.py
 \end{lstlisting}
-\end{tcolorbox}
-
 The advantage of this second method is that it allows you to run your script from anywhere on your system, while the first method requires you to know the full path to the script.
 
 \textbf{Problem 2: Try running both of your scripts now using one of these methods. Note that if your custom message does not include a "data" member, then the subscriber will error. To fix this, change the callback to print either one or several valid members.}
@@ -220,33 +194,28 @@ One other way that nodes can communicate is through services. One disadvantage o
 
 Services allow us to specify a client and a service. A client can send a request message to a service and receive a reply. Similar to messages, we must pre-define services using a a \textbf{.srv} file. As an example, let's define a service that takes two strings and returns them concatenated. Create a new folder \textbf{srv} and a new file \textbf{cat.srv} with the following:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 string a
 string b
 ---
 string cat
 \end{lstlisting}
-\end{tcolorbox}
 
 This specifies that the cat service expects two strings a and b as input and that the client should expect a string cat as output. 
 
 As with messages, we have to configure our CCMakeLists.txt to properly build this service file. 
 
-\begin{tcolorbox}
 \begin{lstlisting}
 add_service_files(
   FILES
   Cat.srv
 )
 \end{lstlisting}
-\end{tcolorbox}
 
 
 
 Now, we can implement our client and service 
 
-\begin{tcolorbox}
 \begin{lstlisting}
 Service:
 from aa274_s2.srv import Cat,CatResponse
@@ -265,10 +234,8 @@ if __name__ == "__main__":
     cat_service()
  
  \end{lstlisting}
-\end{tcolorbox}
 
 
-\begin{tcolorbox}
 \begin{lstlisting}
 Client:
 from aa274_s2.srv import Cat,CatResponse
@@ -290,19 +257,15 @@ if __name__ == "__main__":
 	result = cat_client(s1,s2)
 	print(result)
  \end{lstlisting}
-\end{tcolorbox}
 
 %TODO: Add explanation
 Once again, we build the catkin environment.
 
 To check that our service correctly appears, we can run:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 rossrv show Cat
 \end{lstlisting}	
-\end{tcolorbox}
-
 
 \subsection{Making a ROS action}
 The big disadvantage with services is that they do not let us know about the progress of a service call. This might be fine for short services. However, if we want to do something like plan a path through a room, we want to be able to know more about the state of our call. 
@@ -314,14 +277,12 @@ Sometimes, we just want to share specific values between programs. ROS allows us
 
 You can also directly access parameters from Python using rospy, as below:
 
-\begin{tcolorbox}
 \begin{lstlisting}
 rospy.get_param("")
 rospy.set_param("")
 rospy.search_param("")
 rospy.delete_param("")
 \end{lstlisting}
-\end{tcolorbox}
 
  \textbf{Problem 4: What is the difference between a message, service, action, and parameter?}
 
