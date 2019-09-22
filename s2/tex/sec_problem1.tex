@@ -68,49 +68,12 @@ See $http://docs.ros.org/melodic/api/std_msgs/html/index-msg.html$ for the full 
 %What topics are
 %What messages are
 \subsection{Publishing and Subscribing}
-Now that we've created our custom message type, let's create a script that will publish a message to a topic. All our code will be in Python, using a library called $rospy$, but you can also write the same scripts in C++ using the $roscpp$ library. This script is included in the section code, but it is reproduced below.
+Now that we've created our custom message type, let's create a script that will publish a message to a topic. All our code will be in Python, using a library called $rospy$, but you can also write the same scripts in C++ using the $roscpp$ library. 
 
+Let's walk through the publisher.py file located in the code folder of this section to see how $rospy$ works.
 
-\begin{lstlisting}
-import rospy
-from aa274_s2.msg import MyMessage
-
-def publisher():
-    pub = rospy.Publisher('my_topic', MyMessage, queue_size=10)
-    rospy.init_node('my_node', anonymous=True)
-    rate = rospy.Rate(1)
-    while not rospy.is_shutdown():
-        my_message = MyMessage()
-        pub.publish(my_message)
-        rate.sleep()
-
-if __name__ == '__main__':
-    try:
-        publisher()
-    except rospy.ROSInterruptException:
-        pass
-\end{lstlisting}
-
-%TODO: Add discussion piece about this 
 
 Let's also create a script that will subscribe to the same topic and print each message it receives.
-
-\begin{lstlisting}
-import rospy
-from aa274_s2.msg import MyMessage
-
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-
-def subscriber():
-    rospy.init_node('my_subscriber', anonymous=True)
-    rospy.Subscriber("my_topic", MyMessage, callback)
-    rospy.spin()
-
-if __name__ == '__main__':
-    subscriber()
-\end{lstlisting}
-
 
 
 %TODO: Add discussion piece about this 
@@ -214,49 +177,7 @@ add_service_files(
 
 
 
-Now, we can implement our client and service 
-
-\begin{lstlisting}
-Service:
-from aa274_s2.srv import Cat,CatResponse
-import rospy
-
-def handle_cat(req):
-    print("Returning [%s + %s = %s]"%(req.a, req.b, (req.a + req.b)))
-    return CatResponse(req.a + req.b)
-
-def cat_service():
-    rospy.init_node('cat_service')
-    s = rospy.Service('cat', Cat, handle_cat)
-    rospy.spin()
-
-if __name__ == "__main__":
-    cat_service()
- 
- \end{lstlisting}
-
-
-\begin{lstlisting}
-Client:
-from aa274_s2.srv import Cat,CatResponse
-import rospy
-import sys
-
-def cat_client(x, y):
-    rospy.wait_for_service('cat')
-    try:
-        cat_proxy = rospy.ServiceProxy('cat', Cat)
-        resp1 = cat_proxy(x, y)
-        return resp1.cat
-    except rospy.ServiceException, e:
-        print("Service call failed")
-
-if __name__ == "__main__":
-	s1 = "hi"
-	s2 = "hello"
-	result = cat_client(s1,s2)
-	print(result)
- \end{lstlisting}
+Now, we can implement our client and service. Again, let's walk through these two scripts by opening client.py and server.py in our section code.
 
 %TODO: Add explanation
 Once again, we build the catkin environment.

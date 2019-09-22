@@ -1,0 +1,167 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[margin=1cm]{caption}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage{color}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+
+
+\lstset{%
+    % Basic design
+    backgroundcolor=\color{editorGray},
+    basicstyle={\small\ttfamily},   
+    frame=l,
+    % Line numbers
+    xleftmargin={0.75cm},
+    numbers=left,
+    stepnumber=1,
+    firstnumber=1,
+    numberfirstline=false,
+    }
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+
+\newenvironment{claim}[1]{\par\noindent\underline{Claim:}\space#1}{}
+\newenvironment{claimproof}[1]{\par\noindent\underline{Proof:}\space#1}{\hfill $\blacksquare$}
+
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -0.5in \headheight 0.25in \headsep 0.25in
+\textwidth 6.5in \textheight 9in
+\parskip 6pt \parindent 0in \footskip 20pt
+
+% set the header up
+\fancyhead{}
+\fancyhead[L]{Stanford Aeronautics \& Astronautics}
+\fancyhead[R]{Fall 2019}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\headrulewidth{0.4pt}
+\setlength\headheight{15pt}
+
+\usepackage{outlines}
+
+\usepackage{xparse}
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{\textcolor{blue}{#1}}%
+}
+\usepackage{gensymb}
+
+\newcommand{\ssmargin}[2]{{\color{blue}#1}{\marginpar{\color{blue}\raggedright\scriptsize [SS] #2 \par}}}
+
+
+\setlength{\parindent}{0in}
+
+\title{AA 274: Principles of Robotic Autonomy \\ Section 3: Intro to Hardware and Turtlebot Setup}
+\date{}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+Our goals for this section: \begin{enumerate}
+	\item Familiarize with the Turtlebot hardware.
+	\item Gain basic understanding of the Turtlebot software.
+	\item Build basic tools for interacting with the Turtlebot.
+\end{enumerate}
+
+\section{The Turtlebot Hardware}
+
+%Make schematic with image of Turtlebot + everything labelled
+
+\section{The Turtlebot Software}
+
+Most of the forward-facing Turtlebot software you will work with is located in the asl\_turtlebot repository on Github. To copy it, go to $~/catkin\_ws/src$ in your VM and enter:
+
+\begin{lstlisting}
+git clone https://github.com/StanfordASL/asl_turtlebot.git
+\end{lstlisting}
+
+Then build this library by running:
+
+\begin{lstlisting}
+cd ~/catkin_ws && catkin_make
+\end{lstlisting}
+
+\subsection{Turtlebot bring up}
+First, we must take some steps to configure the VM in order to be able to connect to a TurtleBot. You
+will see $rostb3.sh$ and $roslocal.sh$ in the asl\_turtlebot folder. These files are important for telling your computer where roscore lives. Take a look at the files. Can you figure out roughly what is it doing?
+
+2. Connect to the correct network. (The TA will tell you which one it is.)
+3. Edit rostb3.sh accordingly.
+4. Edit your .bashrc. Whenever you open a terminal, it runs all the commands in this file
+\begin{enumerate}
+	\item Copy those files in your home directory.
+	\item Connect to the correct network. (The TA will tell you which one it is.)
+	\item Edit rostb3.sh accordingly.
+	\item dit your .bashrc. Whenever you open a terminal, it runs all the commands in this file
+	\begin{lstlisting}
+gedit ~/.bashrc &
+	\end{lstlisting}
+	and add the following lines to the end of the file:
+	\begin{lstlisting}
+alias rostb3='source ~/rostb3.sh'
+alias roslocal='source ~/roslocal.sh'
+export TURTLEBOT3_MODEL=burger
+	\end{lstlisting}
+	
+	IMPORTANT: This will create an alias for rostb3 and roslocal. If roscore is to run on the TurtleBot, and you want to run nodes from your computer (not ssh), you must type rostb3 EVERY TIME you open a terminal window. Otherwise if you want to run things locally on your machine, you should run roslocal.
+	\item For these modifications to take effect in the current terminal, run
+	\begin{lstlisting}
+source ~/.bashrc
+	\end{lstlisting}
+\end{enumerate}
+
+Next, in a terminal window, ssh into the TurtleBot using 
+\begin{lstlisting}
+ssh aa274@<TurtleBot Name>.local
+\end{lstlisting}
+
+with the password aa274. This remotely logs into the onboard robot computer. The necessary ROS packages
+and drivers for TurtleBot operation have been pre-installed so we can go ahead and run
+
+\begin{lstlisting}
+roslaunch turtlebot3_bringup turtlebot3_core.launch	
+\end{lstlisting}
+
+to launch core packages to start up the TurtleBot.
+
+\section{TurtleBot Teleoperation}
+
+Now, let's explore teleoperation with the TurtleBot.
+
+\begin{enumerate}
+\item ssh into the TurtleBot from another terminal window. We can start exploring the existing ROS topics. What are all the messages that are being published right now? In particular, look at the odom topic. What is the message type being published to this topic and what information is contained within these messages? HINT: rostopic info odom might help.	
+\item In the same (ssh-ed) terminal window, begin teleoperating the robot by running:
+\begin{lstlisting}
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+\end{lstlisting}
+\item Now try teleoperating the TurtleBot, but without ssh-ing into the TurtleBot. How would you control it from your machine? Afterwards, teleop the TurtleBot back to (0,0,0)
+\end{enumerate}
+
+\subsection{Pub to cmd\_vel}
+Using our code from last week's section, create a publisher that publishes to the cmd\_vel topic and sends a zero velocity signal at every timestep. The skeleton code for this included in this week's code in the velocity\_publisher.py file
+\subsection{Sub to odom}
+Similarly, create a subscriber that subscribes to the odom topic and prints out what it receives. The skeleton code for this is located in the odometry\_subscriber.py file.
+
+
+Please show your TA the output of your odometry subscriber script.
+\subsection{Implement skeleton of pose controller node}
+
+
+
+
+
+
+\end{document}
