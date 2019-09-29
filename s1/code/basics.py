@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 #This script will introduce us to the basics of using Python
 
 #Imports
