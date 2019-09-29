@@ -6,6 +6,7 @@
 #Integration
 
 #Using known function
+print("Integration:")
 from scipy.integrate import quad
 def integrand(x, a, b):
     return a*x**2 + b
@@ -13,24 +14,21 @@ def integrand(x, a, b):
 a = 2
 b = 1
 I = quad(integrand, 0, 1, args=(a,b))
-print(I)
+print("Integral of 2x^2 + 1 from x=0..1: {}".format(I[0]))
 
 #Using arbitrarily spaced samples
 import numpy as np
 def f1(x):
    return x**2
 
-def f2(x):
-   return x**3
-
 x = np.array([1,3,4])
 y1 = f1(x)
 from scipy.integrate import simps
 I1 = simps(y1, x)
-print(I1)
-
+print("Integral of x^2 evaluated at {}: {}".format(x.tolist(), I1))
 
 #Optimization
+print("\nOptimization:")
 import numpy as np
 from scipy.optimize import minimize
 def rosen(x):
@@ -38,8 +36,8 @@ def rosen(x):
     return sum(100.0*(x[1:]-x[:-1]**2.0)**2.0 + (1-x[:-1])**2.0)
 
 x0 = np.array([1.3, 0.7, 0.8, 1.9, 1.2])
-res = minimize(rosen, x0, method='nelder-mead',
-               options={'xtol': 1e-8, 'disp': True})
+print("Nelder-Mead simplex method:")
+res = minimize(rosen, x0, method='nelder-mead', options={'xtol': 1e-8, 'disp': True})
 
 def rosen_der(x):
     xm = x[1:-1]
@@ -51,20 +49,24 @@ def rosen_der(x):
     der[-1] = 200*(x[-1]-x[-2]**2)
     return der
 
-res1 = minimize(rosen, x0, method='BFGS', jac=rosen_der,
-               options={'disp': True})
+print("Broyden-Fletcher-Goldfarb-Shanno method:")
+res1 = minimize(rosen, x0, method='BFGS', jac=rosen_der, options={'disp': True})
 
 #Linear Algebra
 
+print("\nLinear algebra:")
+
 #inverse:
 import numpy as np
-from scipy import linalg
 A = np.array([[1,3,5],[2,5,1],[2,3,8]])
-linalg.inv(A)
+print("A:\n{}\n".format(A))
+print("A^(-1):\n{}\n".format(np.linalg.inv(A)))
 
 #Systems solution
 A = np.array([[1, 2], [3, 4]])
 b = np.array([[5], [6]])
-linalg.inv(A).dot(b)
-linalg.det(A)
-linalg.norm(A,np.inf)
+print("A:\n{}\n".format(A))
+print("b:\n{}\n".format(b))
+print("A^(-1) b:\n{}\n".format(np.linalg.solve(A, b)))
+print("det(A): {}".format(np.linalg.det(A)))
+print("||A||_inf: {}".format(np.linalg.norm(A, np.inf)))
