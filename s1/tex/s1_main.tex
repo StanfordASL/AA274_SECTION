@@ -79,7 +79,7 @@ Our goals for this section: \begin{enumerate}
 \end{enumerate}
 
 
-\section{Installation}
+\section{Virtual Machine Installation}
 For this class, we recommend using a virtual machine (VM) that we provide which has all the
 required software preinstalled.
 Alternatively, you can natively install Linux alongside your normal OS as a dual boot and install the required
@@ -88,10 +88,10 @@ can be driver issues and other edge cases that can come up when installing linux
 officially support the VM in terms of providing help with your setup.
 To set up the VM on your computer, follow the instructions here: 
 
-\href{https://github.com/PrinciplesofRobotAutonomy/aa274-docker}{https://github.com/PrinciplesofRobotAutonomy/aa274-docker}
+\url{https://github.com/PrinciplesofRobotAutonomy/aa274-docker}
 
 \section{Using Git}
-Git is a source control tool that allows us to share code with you. To copy code for this section, type the following into your terminal:
+Git is a source control tool that allows us to share code with you. To obtain code for this section, type the following into your terminal:
 
  \begin{lstlisting}[escapechar=|]
  git clone https://github.com/StanfordASL/AA274_SECTION
@@ -104,22 +104,29 @@ You will use this folder to store all section material for the remainder of the 
 \end{lstlisting}
 
 \section{Python}
-Because our class is composed of students from AA, EE/ME, and CS, we will not assume that you have comprehensive coding knowledge. Therefore, the main purpose of this section is to get your coding skills spun up so you can work on the homework. If you know this material already, please help someone who doesn't know it as well. In the code section of section 1 in the Github repository, you will find several files with example functions that you will find useful in Python. 
+Since our class is composed of students from AA, EE/ME, and CS, we will not assume that you have comprehensive Python knowledge. Therefore, the main purpose of this section is to get your Python coding skills spun up so you can work on the homework. If you know this material already, please help someone who doesn't know it as well.
 
-You can also see additional, more comprehensive examples of each library in the CS231N tutorial:
+In order to complete this part of our section, please switch to the scripts included in the code for this section. Remember, in this course we are using Python 2.7. If you do not have Python 2.7 installed on your computer, or would rather not disrupt your existing Python workspace, feel free to use the VM you just installed! You can start up a terminal with
 
-https://cs231n.github.io/python-numpy-tutorial/
+ \begin{lstlisting}
+./run.sh bash
+\end{lstlisting}
 
-\textbf{Checkoff problem: Using the example code, create a new script that does the following:
+Alternatively, you can directly launch a Python 2.7 REPL (containing all of the necessary packages) using the following
+
+ \begin{lstlisting}
+./run.sh python
+\end{lstlisting}
+
+Once you have had a look through the code, played around with Python a bit, and are aware of the capabilities that Python and its packages offer, complete the following problems:
+{\bf
 \begin{enumerate}
-	\item Define a sin function using Numpy.
-	\item Find the minimum of the function using Scipy.
-	\item Integrate the function from [0,1] using Scipy.
-	\item Plot the function using Matplotlib.
-\end{enumerate}}
-
-Once you have done this, please submit screenshots of your output to:
-
-\href{https://forms.gle/V7rjrRfQJ84cdje29}{https://forms.gle/V7rjrRfQJ84cdje29}
+\item Define a $\sin$ function using NumPy
+\item Find the minimum of the function using SciPy
+\item Integrate the function from $[0, 1]$ using SciPy
+\item Plot the function using Matplotlib from $[0, 2\pi]$
+\end{enumerate}
+}
+Once you have done this, please submit your results \textit{and code} in one writeup file on Gradescope.
 
 \end{document}
