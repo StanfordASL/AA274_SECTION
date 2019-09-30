@@ -79,7 +79,7 @@ Our goals for this section: \begin{enumerate}
 \end{enumerate}
 
 
-\section{Installation}
+\section{Virtual Machine Installation}
 For this class, we recommend using a virtual machine (VM) that we provide which has all the
 required software preinstalled.
 Alternatively, you can natively install Linux alongside your normal OS as a dual boot and install the required
@@ -106,9 +106,19 @@ You will use this folder to store all section material for the remainder of the 
 \section{Python}
 Since our class is composed of students from AA, EE/ME, and CS, we will not assume that you have comprehensive Python knowledge. Therefore, the main purpose of this section is to get your Python coding skills spun up so you can work on the homework. If you know this material already, please help someone who doesn't know it as well.
 
-In order to complete this part of our section, please switch to the scripts included in the code for this section.
+In order to complete this part of our section, please switch to the scripts included in the code for this section. Remember, in this course we are using Python 2.7. If you do not have Python 2.7 installed on your computer, or would rather not disrupt your existing Python workspace, feel free to use the VM you just installed! You can start up a terminal with
 
-Once you have had a look through and are aware of the capabilities that Python offers, complete the following problems:
+ \begin{lstlisting}
+./run.sh bash
+\end{lstlisting}
+
+Alternatively, you can directly launch a Python 2.7 REPL (containing all of the necessary packages) using the following
+
+ \begin{lstlisting}
+./run.sh python
+\end{lstlisting}
+
+Once you have had a look through the code, played around with Python a bit, and are aware of the capabilities that Python and its packages offer, complete the following problems:
 {\bf
 \begin{enumerate}
 \item Define a $\sin$ function using NumPy
