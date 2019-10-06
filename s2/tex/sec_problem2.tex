@@ -1,10 +1,25 @@
 \section{Workstation}
-Below are several useful commands you can run from within your terminal while working with the Docker, server, or Turtlebot.
+As some of you may have realized last section (and potentially even this section), VMs can be computationally expensive, making them cumbersome to work with. As a result, we've obtained a powerful server which gives you a VM-free ROS option in this course. For any homework that has a ROS or Gazebo question, you can either use your own VMs or this workstation. Further, if you or your robot group need to simulate something with Gazebo for your final project, you can also use this workstation.
+
+Please note that to interact with your robots later on, you'll need to have a local machine with ROS on it (the workstation is on a different network). Otherwise, if the homework only requires Python then you should use your local machines and/or Stanford FarmShare machines.
+
+Below are several useful commands you'll use to either interface with the workstation or directly use it.
 \begin{enumerate}
-	\item htop - Use this command to see what processes are currently running
-	\item screen - Use this to open new screens that can run over ssh, even if you disconnect.
-	\item nvidia-smi - Use this to see what processes are using the GPU.
+    \item \texttt{ssh} - Use this command to access the server
+	\item \texttt{htop} - Use this command to see what processes are currently running
+	\item \texttt{screen} - Use this to open new screens that can run over ssh, even if you disconnect.
+	\item \texttt{nvidia-smi} - Use this to see what processes are using the GPU.
+    \item \texttt{scp} - Use this to copy files from your machine to the workstation or vice versa.
 \end{enumerate}
 
+{\bf Problem 5: Once logged into the machine, determine the following
+\begin{enumerate}[label=(\alph*)]
+    \item How many GPUs are there?
+    \item How much RAM is available on the machine?
+    \item How many CPU cores are there?
+    \item What version of Python is available on the machine?
+\end{enumerate}
+Include these in your writeup.}
+
 \section{Group Accounts}
-Will be discussed in section.
+There are 30 group accounts on the machine (30 because we will support 30 final project groups because we have 30 robots). They are named \texttt{group01} to \texttt{group30}, each identically set up with ROS and all its dependencies.

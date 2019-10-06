@@ -9,7 +9,7 @@ So what are some of the basic tasks that ROS implements for us?
 \item Communication: A robot is a collection of hundreds of software programs interacting with one another. Therefore, there has to be some way for these programs to communicate with one another. ROS implements this communication for us.
 \item Visualization: One of the most crucial things we need to do is visualize how our robot is performing. ROS provides multiple tools for visualizing a robot's internal processes.
 \item Package management: We don't want to rewrite our robot's programs from scratch. ROS provides a way for downloading and managing community-sourced packages.
-\item And many more including ... simulators, debuggers, planners, controllers, drivers, 3D processing, grasping, motion tracking, face recognition, and stereo vision.
+\item And many more including simulators, debuggers, planners, controllers, drivers, 3D processing, grasping, motion tracking, face recognition, and stereo vision.
 \end{enumerate}
 
 Before we jump into these, let's go over the basics of how to use ROS.
@@ -22,7 +22,7 @@ roscore
 \end{lstlisting}
 This command starts a ROS master, which is just a naming service. Any time a new node starts in the system, it will have to register with the master. Then, the master will keep track of that node until it closes. The ROS master, in turn, provides a bridge that allows nodes to communicate with each other.
 
-Running roscore will also start a few other processes including \textbf{rosout}, which is a ROS-specific stdout, and a \textbf{parameter server} that allows you to share parameters across nodes.   
+Running roscore will also start a few other processes including \textbf{rosout}, which is a ROS-specific \texttt{stdout}, and a \textbf{parameter server} that allows you to share parameters across nodes.   
 
 What's a \textbf{node}? A node is any executable program that uses ROS to communicate. So, when you run any program that uses ROS to communicate, it is considered a node.
 
@@ -33,11 +33,11 @@ rosnode list
 \end{lstlisting}
 
 \subsection{ROS Communication}
-One way that nodes can communicate with each other is by sending \textbf{messages} over \textbf{topics}. A \textbf{message} is a strong-typed set of data, and the structure of that data is a \textbf{.msg} file. A topic is an address that nodes can either send data to or receive data from. Importantly, only one message type can be sent over a topic. 
+One way that nodes can communicate with each other is by sending \textbf{messages} over \textbf{topics}. A \textbf{message} is a strongly-typed set of data, and the structure of that data is a \textbf{.msg} file. A topic is an address that nodes can either send data to or receive data from. Importantly, only one message type can be sent over a topic. 
 
-Some standard messages are included in ROS libraries like $std_msgs$ and $geometry_msgs$.
+Some standard messages are included in ROS libraries like \texttt{std\_msgs} and \texttt{geometry\_msgs}.
 
-For example, here is the $String.msg$ file in $std_msgs$.
+For example, here is the \texttt{String.msg} file in \texttt{std\_msgs}.
 
 \begin{lstlisting}
 string data
@@ -46,7 +46,7 @@ string data
 
 It's a single line!
 
-Here is the $Pose.msg$ file in $geometry_msgs$.
+Here is the \texttt{Pose.msg} file in \texttt{geometry\_msgs}.
 
 
 \begin{lstlisting}
@@ -58,9 +58,9 @@ Note that it references message types defined in other message files.
 
 ROS uses these pre-defined message types so that nodes can know how to communicate with one another over a given topic.
 
-\textbf{Problem 1: Create your own message file consisting of multiple standard data types. This can be bool, string, float64, char, int64, and many more. }
+\textbf{Problem 1: Create your own message file consisting of multiple standard data types. This can be bool, string, float64, char, int64, and many more.}
 
-See $http://docs.ros.org/melodic/api/std_msgs/html/index-msg.html$ for the full list of standard messages.
+See \url{http://docs.ros.org/kinetic/api/std_msgs/html/index-msg.html} for the full list of standard messages.
 
 %One message type comment is half-true
 
@@ -68,13 +68,11 @@ See $http://docs.ros.org/melodic/api/std_msgs/html/index-msg.html$ for the full 
 %What topics are
 %What messages are
 \subsection{Publishing and Subscribing}
-Now that we've created our custom message type, let's create a script that will publish a message to a topic. All our code will be in Python, using a library called $rospy$, but you can also write the same scripts in C++ using the $roscpp$ library. 
+Now that we've created our custom message type, let's create a script that will publish a message to a topic. All our code will be in Python, using a library called \texttt{rospy}, but you can also write the same scripts in C++ using the \texttt{roscpp} library. 
 
-Let's walk through the publisher.py file located in the code folder of this section to see how $rospy$ works.
+Take a look through the \texttt{publisher.py} and \texttt{subscriber.py} files located in the code folder of this section to see how \texttt{rospy} works.
 
-
-Let's also create a script that will subscribe to the same topic and print each message it receives.
-
+\textbf{Problem 2: Create a publisher and subscriber that publish and subscribe to your custom message type, respectively.}
 
 %TODO: Add discussion piece about this 
 
@@ -84,25 +82,17 @@ Now that we have our message, publisher, and subscriber, let's create a fully fu
 
 The core build system used by ROS is called Catkin. When working with C code, we usually have to use a tool like cmake to build and package our code. Catkin is simply the ROS equivalent of that. 
 
-All of the code we write will be located inside of a catkin workspace. To initialize this workspace run:
-
-\begin{lstlisting}
-cd ~
-mkdir catkin_ws 
-cd catkin_ws
-catkin init
-\end{lstlisting}
-You will see that this creates a src folder in your directory. Now to create a new package for our code, run:
+All of the code we write will be located inside of a catkin workspace. To create a new package for our code, run:
 
 \begin{lstlisting}
 catkin_create_pkg aa274_s2 std_msgs rospy message_generation
 \end{lstlisting}
 
-This will create a new package called aa274\_s2 in the src folder. The last three arguments are library dependencies that this package will require to run.
+This will create a new package called \texttt{aa274\_s2} in the \texttt{src} folder. The last three arguments are library dependencies that this package will require to run.
 
-Now change into the aa274\_s2 directory. You will see that there are three items in it: CMakeLists.txt, package.xml, and an empty src folder. Go ahead and copy the scripts folder and the msg folder from the section code into aa274\_s2. Now, let's take a few minutes to inspect those first two files.
+Now change into the \texttt{aa274\_s2} directory. You will see that there are three items in it: \texttt{CMakeLists.txt}, \texttt{package.xml}, and an empty \texttt{src} folder. Go ahead and copy the scripts folder and the msg folder from the section code into \texttt{aa274\_s2}. Now, let's take a few minutes to inspect those first two files.
 
-CMakeLists.txt is the most important file here, since it specifies what needs to be built and generated when we run our catkin build command. Because we have custom messages, we need to take an extra step.
+\texttt{CMakeLists.txt} is the most important file here, since it specifies what needs to be built and generated when we run our catkin build command. Since we have custom messages, we need to take an extra step.
 
 At the bottom of this file, add the following
 
@@ -124,7 +114,7 @@ chmod +x scripts/publisher.py
 chmod +x scripts/subscriber.py
 \end{lstlisting}
 
-Now, switch back into the catkin\_ws folder. You're ready to build your package. To build, run
+Now, switch back into the \texttt{catkin\_ws} folder. You're ready to build your package. To build, run
 
 \begin{lstlisting}
 catkin build aa274_s2
@@ -133,68 +123,72 @@ source devel/setup.bash
 
 The first command calls catkin to build our package, and the second command updates the ROS environment so that it recognizes your newly built package.
 
-Note that there is another, older way of building with catkin called catkin\_make, but we will not use it in this class.
+Note that there is another, older way of building with catkin called \texttt{catkin\_make}, but we will not use it in this class.
 
 Now, you should have a fully functional package! You can now run your scripts in one of two ways. You can directly treat them like Python scripts by switching into the scripts folder and running 
 
 \begin{lstlisting}
 python publisher.py
+python subscriber.py
 \end{lstlisting}
 
 Or, you can run your script from anywhere using the rosrun command:
 
 \begin{lstlisting}
 rosrun aa274_s2 publisher.py
+rosrun aa274_s2 subscriber.py
 \end{lstlisting}
 The advantage of this second method is that it allows you to run your script from anywhere on your system, while the first method requires you to know the full path to the script.
 
-\textbf{Problem 2: Try running both of your scripts now using one of these methods. Note that if your custom message does not include a "data" member, then the subscriber will error. To fix this, change the callback to print either one or several valid members.}
+Try running both of your scripts now using one of these methods. Note that if your custom message does not include a "data" member, then the subscriber will error. To fix this, change the callback to print either one or several valid members.
 
-Now that we've created a simple publisher and subscriber using the ROS topic paradigm, let's see how else nodes can communicate. 
-\subsection{Making a ROS service}
+\textbf{Problem 3: Include screenshots or terminal output text that shows your publisher and subscriber are working.}
 
-One other way that nodes can communicate is through services. One disadvantage of using topics is that you end up publishing a lot of unused data. Furthermore, in a distributed system, we need a way for programs to request and reply to one another. This is where services come in. 
+% Now that we've created a simple publisher and subscriber using the ROS topic paradigm, let's see how else nodes can communicate. 
+% \subsection{Making a ROS service}
 
-Services allow us to specify a client and a service. A client can send a request message to a service and receive a reply. Similar to messages, we must pre-define services using a a \textbf{.srv} file. As an example, let's define a service that takes two strings and returns them concatenated. Create a new folder \textbf{srv} and a new file \textbf{cat.srv} with the following:
+% One other way that nodes can communicate is through services. One disadvantage of using topics is that you end up publishing a lot of unused data. Furthermore, in a distributed system, we need a way for programs to request and reply to one another. This is where services come in. 
 
-\begin{lstlisting}
-string a
-string b
----
-string cat
-\end{lstlisting}
+% Services allow us to specify a client and a service. A client can send a request message to a service and receive a reply. Similar to messages, we must pre-define services using a a \textbf{.srv} file. As an example, let's define a service that takes two strings and returns them concatenated. Create a new folder \textbf{srv} and a new file \textbf{cat.srv} with the following:
 
-This specifies that the cat service expects two strings a and b as input and that the client should expect a string cat as output. 
+% \begin{lstlisting}
+% string a
+% string b
+% ---
+% string cat
+% \end{lstlisting}
 
-As with messages, we have to configure our CCMakeLists.txt to properly build this service file. 
+% This specifies that the cat service expects two strings a and b as input and that the client should expect a string cat as output. 
 
-\begin{lstlisting}
-add_service_files(
-  FILES
-  Cat.srv
-)
-\end{lstlisting}
+% As with messages, we have to configure our CCMakeLists.txt to properly build this service file. 
+
+% \begin{lstlisting}
+% add_service_files(
+%   FILES
+%   Cat.srv
+% )
+% \end{lstlisting}
 
 
 
-Now, we can implement our client and service. Again, let's walk through these two scripts by opening client.py and server.py in our section code.
+% Now, we can implement our client and service. Again, let's walk through these two scripts by opening client.py and server.py in our section code.
 
-%TODO: Add explanation
-Once again, we build the catkin environment.
+% %TODO: Add explanation
+% Once again, we build the catkin environment.
 
-To check that our service correctly appears, we can run:
+% To check that our service correctly appears, we can run:
 
-\begin{lstlisting}
-rossrv show Cat
-\end{lstlisting}	
+% \begin{lstlisting}
+% rossrv show Cat
+% \end{lstlisting}	
 
-\subsection{Making a ROS action}
-The big disadvantage with services is that they do not let us know about the progress of a service call. This might be fine for short services. However, if we want to do something like plan a path through a room, we want to be able to know more about the state of our call. 
+% \subsection{Making a ROS action}
+% The big disadvantage with services is that they do not let us know about the progress of a service call. This might be fine for short services. However, if we want to do something like plan a path through a room, we want to be able to know more about the state of our call. 
 
-This is where actions come in. Actions are just like services, but use a goal, result, and feedback instead of a request and response. 
+% This is where actions come in. Actions are just like services, but use a goal, result, and feedback instead of a request and response. 
 
 \subsection{Setting a ROS parameter}
-Sometimes, we just want to share specific values between programs. ROS allows us to do so using a parameter server, which is just a shared dictionary. To view how you can interact with ROS parameters, type \textbf{rosparam} into your terminal.
+Sometimes, we just want to share specific values between programs. ROS allows us to do so using a parameter server, which is just a shared dictionary. To view how you can interact with ROS parameters, type \texttt{rosparam} into your terminal.
 
 You can also directly access parameters from Python using rospy, as below:
 
@@ -205,13 +199,19 @@ rospy.search_param("")
 rospy.delete_param("")
 \end{lstlisting}
 
- \textbf{Problem 4: What is the difference between a message, service, action, and parameter?}
+\subsection{Helpful ROS commands}
+Here is a list of ROS commands that you will use often to understand what topics are being used.
+\begin{enumerate}
+	\item \texttt{rostopic list} - This lists all of the topics that have been used or are in use.
+	\item \texttt{rostopic echo} -This echos the messages that are being sent to the particular topic.
+	\item \texttt{rostopic hz} - This returns the frequency at which the topic is being published to
+	\item \texttt{rostopic pub} - This allows you to publish to a topic. It's useful for debugging a subscriber.
+\end{enumerate}
 
-%\subsection{Helpful ROS commands}
-%Here is a list of ROS commands that you will use often to understand what topics are being used.
-%\begin{enumerate}
-%	\item rostopic list - This lists all of the topics that have been used or are in use.
-%	\item rostopic echo -This echos the messages that are being sent to the particular topic.
-%	\item rostopic hz  - This returns the frequency at which the topic is being published to
-%	\item rostopic pub - This allows you to publish to a topic. It's useful for debugging a subscriber.
-%\end{enumerate}
+{\bf Problem 4: Run the first three of these to
+\begin{enumerate}[label=(\alph*)]
+    \item See that your topic is registered and visible
+    \item Show what your publisher is publishing
+    \item Determine the frequency with which your publisher is publishing messages.
+\end{enumerate}
+Include these in your writeup.}
