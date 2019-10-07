@@ -18,7 +18,7 @@ Before we jump into these, let's go over the basics of how to use ROS.
 To start ROS, run the following command 
 
 \begin{lstlisting}
-roscore
+roscore # In Docker, this would be ./run.sh roscore
 \end{lstlisting}
 This command starts a ROS master, which is just a naming service. Any time a new node starts in the system, it will have to register with the master. Then, the master will keep track of that node until it closes. The ROS master, in turn, provides a bridge that allows nodes to communicate with each other.
 
@@ -29,7 +29,7 @@ What's a \textbf{node}? A node is any executable program that uses ROS to commun
 To list all of your running nodes, run:
 
 \begin{lstlisting}
-rosnode list
+rosnode list # In Docker, this would be ./run.sh rosnode list
 \end{lstlisting}
 
 \subsection{ROS Communication}
@@ -82,19 +82,23 @@ Now that we have our message, publisher, and subscriber, let's create a fully fu
 
 The core build system used by ROS is called Catkin. When working with C code, we usually have to use a tool like cmake to build and package our code. Catkin is simply the ROS equivalent of that. 
 
-All of the code we write will be located inside of a catkin workspace. To create a new package for our code, run:
+All of the code we write will be located inside of a catkin workspace. To create a new package for our code, run the following from within the \texttt{catkin\_ws/src} directory:
 
 \begin{lstlisting}
 catkin_create_pkg aa274_s2 std_msgs rospy message_generation
+# In Docker, the easiest way to do this would be to first get a shell with 
+# ./run.sh bash 
+# and then cd to the src directory, followed by running the 
+# catkin_create_pkg ... command.
 \end{lstlisting}
 
 This will create a new package called \texttt{aa274\_s2} in the \texttt{src} folder. The last three arguments are library dependencies that this package will require to run.
 
-Now change into the \texttt{aa274\_s2} directory. You will see that there are three items in it: \texttt{CMakeLists.txt}, \texttt{package.xml}, and an empty \texttt{src} folder. Go ahead and copy the scripts folder and the msg folder from the section code into \texttt{aa274\_s2}. Now, let's take a few minutes to inspect those first two files.
+Now change into the \texttt{aa274\_s2} directory. You will see that there are three items in it: \texttt{CMakeLists.txt}, \texttt{package.xml}, and an empty \texttt{src} folder. Go ahead and copy the scripts folder and the msg folder from the section code into \texttt{aa274\_s2}. If you're using Docker, remember that you can change files as normal (without Docker) under the \texttt{catkin\_ws} folder, since they are mapped to the Docker container during use. Now, let's take a few minutes to inspect those first two files.
 
 \texttt{CMakeLists.txt} is the most important file here, since it specifies what needs to be built and generated when we run our catkin build command. Since we have custom messages, we need to take an extra step.
 
-At the bottom of this file, add the following
+At the bottom of this file, at the end of the ``declare ROS messages, services and actions" (before \texttt{catkin\_package()} is called), add the following
 
 \begin{lstlisting}
 add_message_files(FILES MyMessage.msg)
@@ -114,16 +118,14 @@ chmod +x scripts/publisher.py
 chmod +x scripts/subscriber.py
 \end{lstlisting}
 
-Now, switch back into the \texttt{catkin\_ws} folder. You're ready to build your package. To build, run
+Now, switch back into the \texttt{catkin\_ws} folder (this is not necessary if you're using Docker). You're ready to build your package. To build, run
 
 \begin{lstlisting}
-catkin build aa274_s2
-source devel/setup.bash
+catkin_make # In Docker, this would be ./run.sh catkin_make
+source devel/setup.bash # Not necessary in Docker.
 \end{lstlisting}
 
 The first command calls catkin to build our package, and the second command updates the ROS environment so that it recognizes your newly built package.
-
-Note that there is another, older way of building with catkin called \texttt{catkin\_make}, but we will not use it in this class.
 
 Now, you should have a fully functional package! You can now run your scripts in one of two ways. You can directly treat them like Python scripts by switching into the scripts folder and running 
 
@@ -132,7 +134,7 @@ python publisher.py
 python subscriber.py
 \end{lstlisting}
 
-Or, you can run your script from anywhere using the rosrun command:
+Or, you can run your script from anywhere using the \texttt{rosrun} command:
 
 \begin{lstlisting}
 rosrun aa274_s2 publisher.py

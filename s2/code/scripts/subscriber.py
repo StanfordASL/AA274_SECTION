@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import rospy
 from aa274_s2.msg import MyMessage
 
