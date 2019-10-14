@@ -82,55 +82,63 @@ Welcome to the robot portion of the course! In front of you is a surprisingly ex
 
 \section{The Turtlebot Software}
 
-Most of the forward-facing Turtlebot software you will work with is located in the \texttt{asl\_turtlebot} repository on Github. To get it, go to \texttt{\textasciitilde/catkin\_ws/src} in your VM (or wherever your catkin workspace is if you're using Docker) and run:
+If you're using Docker, first update the \texttt{aa274-docker} repository:
+
+\begin{lstlisting}
+git pull
+./build_docker.sh
+\end{lstlisting}
+
+Most of the forward-facing Turtlebot software you will work with is located in the \texttt{asl\_turtlebot} repository on Github. To get it, go to \texttt{\textasciitilde/catkin\_ws/src} in your VM (or wherever your catkin workspace is if you're using Docker) and if the \texttt{asl\_turtlebot} repository doesn't already exist, run:
 
 \begin{lstlisting}
 git clone https://github.com/StanfordASL/asl_turtlebot.git
 \end{lstlisting}
 
-Since we downloaded a new catkin package, we need to rebuild the workspace by running the following. This might be different if you're using Docker, please consult the \texttt{aa274-docker} repository README!
+or if the repo does exist, then \texttt{cd} into the directory and run:
 
 \begin{lstlisting}
-cd ~/catkin_ws
+git pull
+\end{lstlisting}
+
+to update to the latest code.
+
+Since we downloaded a new catkin package, we need to rebuild the workspace by running the following from the \texttt{~/catkin\_ws} directory (or if you're using Docker, then \texttt{cd} to the \texttt{aa274-docker} directory and prepend the following command with \texttt{./run.sh}, as usual).
+
+\begin{lstlisting}
 catkin_make
 \end{lstlisting}
 
 \subsection{Turtlebot bring up}
-First, we must take some steps to configure the VM in order to be able to connect to a TurtleBot. You
-will see $rostb3.sh$ and $roslocal.sh$ in the asl\_turtlebot folder. These files are important for telling your computer where roscore lives. Take a look at the files. Can you figure out roughly what is it doing?
+First, we must take some steps to configure the VM in order to be able to connect to a TurtleBot. You will see $rostb3.sh$ and $roslocal.sh$ in the \texttt{asl\_turtlebot} folder. These files are important for telling your computer where roscore lives. Take a look at the files. Can you figure out roughly what is it doing?
 
-2. Connect to the correct network. (The TA will tell you which one it is.)
-3. Edit rostb3.sh accordingly.
-4. Edit your .bashrc. Whenever you open a terminal, it runs all the commands in this file
+We will now set up these scripts so it's easy to switch between them.
 \begin{enumerate}
-	\item Copy those files in your home directory.
+	% \item Copy those files in your home directory.
 	\item Connect to the correct network. (The TA will tell you which one it is.)
-	\item Edit rostb3.sh accordingly.
-	\item dit your .bashrc. Whenever you open a terminal, it runs all the commands in this file
+	\item Edit \texttt{rostb3.sh} accordingly.
+	\item Open your \texttt{.bashrc} with a text editor. All the shell commands in this file will get run whenever you open a terminal.
+	Add the following lines to the end of the file:
 	\begin{lstlisting}
-gedit ~/.bashrc &
-	\end{lstlisting}
-	and add the following lines to the end of the file:
-	\begin{lstlisting}
-alias rostb3='source ~/rostb3.sh'
-alias roslocal='source ~/roslocal.sh'
+alias rostb3='source ~/catkin_ws/src/asl_turtlebot/rostb3.sh'
+alias roslocal='source ~/catkin_ws/src/asl_turtlebot/roslocal.sh'
 export TURTLEBOT3_MODEL=burger
 	\end{lstlisting}
 	
-	IMPORTANT: This will create an alias for rostb3 and roslocal. If roscore is to run on the TurtleBot, and you want to run nodes from your computer (not ssh), you must type rostb3 EVERY TIME you open a terminal window. Otherwise if you want to run things locally on your machine, you should run roslocal.
-	\item For these modifications to take effect in the current terminal, run
+	IMPORTANT: This will create an alias for rostb3 and roslocal. If roscore is to run on the TurtleBot, and you want to run nodes from your computer (not ssh), you must type rostb3 EVERY TIME you open a terminal window. Otherwise, if you want to run things locally on your machine, you should run roslocal.
+	\item For these modifications to take effect in the current terminal, run:
 	\begin{lstlisting}
 source ~/.bashrc
 	\end{lstlisting}
 \end{enumerate}
 
-Next, in a terminal window, ssh into the TurtleBot using 
+Next, in a terminal window, ssh into the TurtleBot using:
 \begin{lstlisting}
 ssh aa274@<TurtleBot Name>.local
 \end{lstlisting}
 
-with the password aa274. This remotely logs into the onboard robot computer. The necessary ROS packages
-and drivers for TurtleBot operation have been pre-installed so we can go ahead and run
+with the password \texttt{aa274}. This remotely logs into the onboard robot computer. The necessary ROS packages
+and drivers for TurtleBot operation have been pre-installed so we can go ahead and run:
 
 \begin{lstlisting}
 roslaunch turtlebot3_bringup turtlebot3_core.launch	
@@ -148,13 +156,13 @@ Now, let's explore teleoperation with the TurtleBot.
 \begin{lstlisting}
 roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
 \end{lstlisting}
-\item Now try teleoperating the TurtleBot, but without ssh-ing into the TurtleBot. How would you control it from your machine? Afterwards, teleop the TurtleBot back to (0,0,0)
+\item Now try teleoperating the TurtleBot, but without ssh-ing into the TurtleBot. How would you control it from your machine? Afterwards, teleop the TurtleBot back to $(0,0,0)$.
 \end{enumerate}
 
 \subsection{Pub to cmd\_vel}
-Using our code from last week's section, create a publisher that publishes to the cmd\_vel topic and sends a zero velocity signal at every timestep. The skeleton code for this included in this week's code in the velocity\_publisher.py file
+Using our code from last week's section, create a publisher that publishes to the \texttt{cmd\_vel} topic and sends a zero velocity signal at every timestep. The skeleton code for this included in this week's code in the \texttt{velocity\_publisher.py} file
 \subsection{Sub to odom}
-Similarly, create a subscriber that subscribes to the odom topic and prints out what it receives. The skeleton code for this is located in the odometry\_subscriber.py file.
+Similarly, create a subscriber that subscribes to the odom topic and prints out what it receives. The skeleton code for this is located in the \texttt{odometry\_subscriber.py} file.
 
 
 Please show your TA the output of your odometry subscriber script.
