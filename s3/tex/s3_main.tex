@@ -103,7 +103,7 @@ git pull
 
 to update to the latest code.
 
-Since we downloaded a new catkin package, we need to rebuild the workspace by running the following from the \texttt{~/catkin\_ws} directory (or if you're using Docker, then \texttt{cd} to the \texttt{aa274-docker} directory and prepend the following command with \texttt{./run.sh}, as usual).
+Since we downloaded a new catkin package, we need to rebuild the workspace by running the following from the \texttt{\textasciitilde/catkin\_ws} directory (or if you're using Docker, then \texttt{cd} to the \texttt{aa274-docker} directory and prepend the following command with \texttt{./run.sh}, as usual).
 
 \begin{lstlisting}
 catkin_make
@@ -146,12 +146,14 @@ roslaunch turtlebot3_bringup turtlebot3_core.launch
 
 to launch core packages to start up the TurtleBot.
 
+{\bf Problem 1: Once this is all running, which rostopics are available? Paste this list in your submission.}
+
 \section{TurtleBot Teleoperation}
 
 Now, let's explore teleoperation with the TurtleBot.
 
 \begin{enumerate}
-\item ssh into the TurtleBot from another terminal window. We can start exploring the existing ROS topics. What are all the messages that are being published right now? In particular, look at the odom topic. What is the message type being published to this topic and what information is contained within these messages? HINT: rostopic info odom might help.	
+\item ssh into the TurtleBot from another terminal window. We can start exploring the existing ROS topics. What are all the messages that are being published right now? In particular, look at the odom topic. What is the message type being published to this topic and what information is contained within these messages? HINT: rostopic info odom might help.
 \item In the same (ssh-ed) terminal window, begin teleoperating the robot by running:
 \begin{lstlisting}
 roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
@@ -159,13 +161,16 @@ roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
 \item Now try teleoperating the TurtleBot, but without ssh-ing into the TurtleBot. How would you control it from your machine? Afterwards, teleop the TurtleBot back to $(0,0,0)$.
 \end{enumerate}
 
+{\bf Problem 2: What is the message type being published to \texttt{odom} and what information is contained within these messages?}
+
 \subsection{Pub to cmd\_vel}
 Using our code from last week's section, create a publisher that publishes to the \texttt{cmd\_vel} topic and sends a zero velocity signal at every timestep. The skeleton code for this included in this week's code in the \texttt{velocity\_publisher.py} file
+
+{\bf Problem 3: Paste your code in your submission, as well as any of its running output.}
+
 \subsection{Sub to odom}
 Similarly, create a subscriber that subscribes to the odom topic and prints out what it receives. The skeleton code for this is located in the \texttt{odometry\_subscriber.py} file.
 
-
-Please show your TA the output of your odometry subscriber script.
-
+{\bf Problem 4: Paste your code in your submission, as well as any of its running output.}
 
 \end{document}
