@@ -62,7 +62,7 @@
 
 \setlength{\parindent}{0in}
 
-\title{AA 274: Principles of Robotic Autonomy \\ Section 3: Intro to Hardware and Turtlebot Setup}
+\title{AA 274A: Principles of Robot Autonomy I \\ Section 3: Introduction to Course Hardware and Turtlebot Setup}
 \date{}
 
 \begin{document}
@@ -71,27 +71,28 @@
 \pagestyle{fancy}
 
 Our goals for this section: \begin{enumerate}
-	\item Familiarize with the Turtlebot hardware.
-	\item Gain basic understanding of the Turtlebot software.
-	\item Build basic tools for interacting with the Turtlebot.
+	\item Become familiar with the Turtlebot hardware.
+	\item Gain a basic understanding of the Turtlebot software.
+	\item Use basic tools for interacting with the Turtlebot.
 \end{enumerate}
 
 \section{The Turtlebot Hardware}
 
-%Make schematic with image of Turtlebot + everything labelled
+Welcome to the robot portion of the course! In front of you is a surprisingly expensive robot. \textit{SO PLEASE BE CAREFUL WHEN HANDLING IT OR MOVING ANY OF THE WIRES!}
 
 \section{The Turtlebot Software}
 
-Most of the forward-facing Turtlebot software you will work with is located in the asl\_turtlebot repository on Github. To copy it, go to $~/catkin\_ws/src$ in your VM and enter:
+Most of the forward-facing Turtlebot software you will work with is located in the \texttt{asl\_turtlebot} repository on Github. To get it, go to \texttt{\textasciitilde/catkin\_ws/src} in your VM (or wherever your catkin workspace is if you're using Docker) and run:
 
 \begin{lstlisting}
 git clone https://github.com/StanfordASL/asl_turtlebot.git
 \end{lstlisting}
 
-Then build this library by running:
+Since we downloaded a new catkin package, we need to rebuild the workspace by running the following. This might be different if you're using Docker, please consult the \texttt{aa274-docker} repository README!
 
 \begin{lstlisting}
-cd ~/catkin_ws && catkin_make
+cd ~/catkin_ws
+catkin_make
 \end{lstlisting}
 
 \subsection{Turtlebot bring up}
