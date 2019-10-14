@@ -146,6 +146,22 @@ roslaunch turtlebot3_bringup turtlebot3_core.launch
 
 to launch core packages to start up the TurtleBot.
 
+\textbf{SCPD Students:} Instead of ssh-ing into the robots, you'll be interfacing with TurtleBots in Gazebo on the workstation. Download TurboVNC (if you haven't already), connect to the Stanford VPN with your suid, and ask your TA for login instructions.
+
+Once logged in, start roscore:
+
+\begin{lstlisting}
+roscore -p $ROS_PORT
+\end{lstlisting}
+
+In a new terminal window, run the Gazebo environment:
+
+\begin{lstlisting}
+roslaunch turtlebot3_gazebo turtlebot3_world.launch
+\end{lstlisting}
+
+Because you don't have to switch between simulated and actual TurtleBots, there is no need to set up \texttt{rostb3.sh} and \texttt{roslocal.sh}. Once you have Gazebo running, you''re ready to go.
+
 {\bf Problem 1: Once this is all running, which rostopics are available? Paste this list in your submission.}
 
 \section{TurtleBot Teleoperation}
