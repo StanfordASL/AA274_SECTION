@@ -136,7 +136,13 @@ Instead of ssh-ing into the robots, you'll be interfacing with TurtleBots in Gaz
 
 Connect to the server with VNC. For example, if your group username is \texttt{group01} then you would connect to \texttt{genbu.stanford.edu:1}. Similarly, if it's \texttt{group13} then you would connect to \texttt{genbu.stanford.edu:13}
 
-Once logged in, open a terminal and start roscore:
+Once logged in, first update the \texttt{asl\_turtlebot} repository:
+\begin{lstlisting}
+cd ~/catkin_ws/src/asl_turtlebot
+git pull
+\end{lstlisting}
+
+Then start roscore:
 \begin{lstlisting}
 roscore -p $ROS_PORT
 \end{lstlisting}
