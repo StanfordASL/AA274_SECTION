@@ -94,14 +94,19 @@ ls
 \end{lstlisting}
 If you see a folder named \texttt{velodyne} then you already have the package.
 
-{\bf Already have the package:} Great! You can move on to the next section.
+{\bf Already have the package:} Great! Let's update it to make sure it's up to date.
+\begin{lstlisting}
+cd velodyne
+git pull
+\end{lstlisting}
 
 {\bf Don't have the package:} Great! Let's get it now. To add a new package to the our catkin workspace, simply clone the package from where it resides to the \texttt{catkin\_ws/src} directory. Fortunately for us, the \texttt{velodyne} package is easily-accessible through GitHub. To obtain it, execute the following from within the \texttt{catkin\_ws/src} directory (you can check this by executing \texttt{pwd}):
 \begin{lstlisting}
 git clone https://github.com/ros-drivers/velodyne.git
 \end{lstlisting}
 
-Once the package has finished cloning, we need to rebuild our catkin workspace. Recall, we can do this as follows
+{\bf Build the package:}
+Once the package has finished cloning/pulling, we need to rebuild our catkin workspace. Recall, we can do this as follows
 \begin{lstlisting}
 cd .. # We want to be within the catkin_ws directory
 catkin_make
@@ -150,11 +155,9 @@ roslaunch turtlebot3_gazebo turtlebot3_world.launch
 
 On your local machine, whether it be Windows + VM, Mac + Docker, Linux + Docker, or Linux, open a terminal and execute \texttt{rviz}.
 
-{\bf NOTE:} If you are using Docker, then you will need to use the \texttt{display} flag here, since \texttt{rviz} uses a graphical user interface (GUI). Specifically, from the \texttt{aa274-docker} directory, you'd run 
+{\bf NOTE:} If you are using Docker, then you will need to use the \texttt{display} flag here, since \texttt{rviz} uses a graphical user interface (GUI). Furthermore, because networking with the robot works differently in docker, we will have to pass in the name of the robot with the \texttt{rosmaster} flag. This also means we don't have to run the \texttt{rostb3.sh} script inside Docker. Specifically, from the \texttt{aa274-docker} directory, you'd run 
 \begin{lstlisting}
-./run.sh --display 1
-rostb3 # Remember to change the turtlebot host in this file!!
-rviz
+./run.sh --display 1 --rosmaster robotname.local rviz
 \end{lstlisting}
 After this, connect to your Docker's display with TurboVNC (\texttt{localhost:1} if you used the same number above).
 
