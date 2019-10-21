@@ -1,0 +1,206 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[margin=1cm]{caption}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage{color}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+
+
+\lstset{%
+    % Basic design
+    backgroundcolor=\color{editorGray},
+    basicstyle={\small\ttfamily},   
+    frame=l,
+    % Line numbers
+    xleftmargin={0.75cm},
+    numbers=left,
+    stepnumber=1,
+    firstnumber=1,
+    numberfirstline=false,
+    }
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+
+\newenvironment{claim}[1]{\par\noindent\underline{Claim:}\space#1}{}
+\newenvironment{claimproof}[1]{\par\noindent\underline{Proof:}\space#1}{\hfill $\blacksquare$}
+
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -0.5in \headheight 0.25in \headsep 0.25in
+\textwidth 6.5in \textheight 9in
+\parskip 6pt \parindent 0in \footskip 20pt
+
+% set the header up
+\fancyhead{}
+\fancyhead[L]{Stanford Aeronautics \& Astronautics}
+\fancyhead[R]{Fall 2019}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\headrulewidth{0.4pt}
+\setlength\headheight{15pt}
+
+\usepackage{outlines}
+
+\usepackage{xparse}
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{\textcolor{blue}{#1}}%
+}
+\usepackage{gensymb}
+
+\newcommand{\ssmargin}[2]{{\color{blue}#1}{\marginpar{\color{blue}\raggedright\scriptsize [SS] #2 \par}}}
+
+
+\setlength{\parindent}{0in}
+
+\title{AA 274A: Principles of Robot Autonomy I \\ Section 4: Visualizing Information from Robots}
+\date{}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+Our goals for this section: \begin{enumerate}
+	\item Potentially become familiar with catkin package installation
+    \item Become familiar with tools for visualizing information from your robots.
+    \item Write a marker using rviz.
+    \item Introduce yourselves to dynamic reconfigure.
+\end{enumerate}
+
+\section{Package Installation}
+
+Before we dive into information visualization, we may have to install some packages to endow our robots with the necessary capabilities we're looking for. Chiefly, some of your turtlebots do not have the \texttt{velodyne} catkin package installed. This poses a problem since, without it, we cannot use the scans coming out of the velodyne.
+
+First, we need to check to see if the package is already on our robot. We can do this by \texttt{ssh}'ing into our robot (remember to first connect to the correct network):
+\begin{lstlisting}
+ssh aa274@<lowercase_robot_name>.local
+# If you're on a Windows VM and need the IP address of your bot, let a TA know.
+\end{lstlisting}
+
+Once inside the robot, you will need to check the contents of the \texttt{catkin\_ws/src} directory
+\begin{lstlisting}
+cd catkin_ws/src
+ls
+\end{lstlisting}
+If you see a folder named \texttt{velodyne} then you already have the package.
+
+{\bf Already have the package:} Great! You can move on to the next section.
+
+{\bf Don't have the package:} Great! Let's get it now. To add a new package to the our catkin workspace, simply clone the package from where it resides to the \texttt{catkin\_ws/src} directory. Fortunately for us, the \texttt{velodyne} package is easily-accessible through GitHub. To obtain it, execute the following from within the \texttt{catkin\_ws/src} directory (you can check this by executing \texttt{pwd}):
+\begin{lstlisting}
+git clone https://github.com/ros-drivers/velodyne.git
+\end{lstlisting}
+
+Once the package has finished cloning, we need to rebuild our catkin workspace. Recall, we can do this as follows
+\begin{lstlisting}
+cd .. # We want to be within the catkin_ws directory
+catkin_make
+\end{lstlisting}
+
+This will take some time, so leave it alone until it's fully finished. Once it completes successfully, rejoice! You now have the necessary packages to move on.
+
+\section{Information Visualization with \texttt{rviz}}
+
+\texttt{rviz} is a 3D visualization tool for ROS, visualizing information such as maps and point clouds in a much more intuitive way compared to \texttt{rostopic echo}.
+
+\subsection{Full Turtlebot bring up}
+
+\subsubsection{On-Campus Students}
+
+Next, in a terminal window, ssh into the TurtleBot using:
+\begin{lstlisting}
+ssh aa274@<lowercase_robot_name>.local
+\end{lstlisting}
+with the password \texttt{aa274}. This remotely logs into the onboard robot computer. Now that we have all of the necessary packages, we can go ahead and run:
+\begin{lstlisting}
+roslaunch asl_turtlebot turtlebot3_bringup_jetson_pi.launch
+\end{lstlisting}
+{\bf NOTE:} Only one person has to do this on the robot, once this is running then everyone else will be able to see the data we're going to visualize next.
+
+\subsubsection{Off-Campus Students}
+Instead of ssh-ing into the robots, you'll be interfacing with TurtleBots in Gazebo on the workstation. Download TurboVNC (if you haven't already), connect to the Stanford VPN with your suid, and ask your TA for \texttt{genbu} login instructions.
+
+Connect to the server with VNC. For example, if your group username is \texttt{group01} then you would connect to \texttt{genbu.stanford.edu:1}. Similarly, if it's \texttt{group13} then you would connect to \texttt{genbu.stanford.edu:13}
+
+Once logged in, open a terminal and start roscore:
+\begin{lstlisting}
+roscore -p $ROS_PORT
+\end{lstlisting}
+
+In a new terminal tab or window, run the Gazebo environment:
+\begin{lstlisting}
+roslaunch turtlebot3_gazebo turtlebot3_world.launch
+\end{lstlisting}
+
+{\bf Problem 1: Once this is all running, which rostopics are available? Paste this list in your submission.}
+
+\subsection{Starting up \texttt{rviz}}
+
+\subsubsection{On-Campus Students}
+
+On your local machine, whether it be Windows + VM, Mac + Docker, Linux + Docker, or Linux, open a terminal and execute \texttt{rviz}.
+
+{\bf NOTE:} If you are using Docker, then you will need to use the \texttt{display} flag here, since \texttt{rviz} uses a graphical user interface (GUI). Specifically, from the \texttt{aa274-docker} directory, you'd run 
+\begin{lstlisting}
+./run.sh --display 1
+rostb3 # Remember to change the turtlebot host in this file!!
+rviz
+\end{lstlisting}
+After this, connect to your Docker's display with TurboVNC (\texttt{localhost:1} if you used the same number above).
+
+\subsubsection{Off-Campus Students}
+
+Open another terminal and execute \texttt{rviz}.
+
+\subsection{Populating \texttt{rviz}}
+
+Now that we have \texttt{rviz} running, let's quickly check that we can actually see the entire \texttt{rviz} GUI (this is a potential problem with TurboVNC and screen sizes). If you cannot scroll down and see the display's Reset button, then you cannot see the full \texttt{rviz} screen. To fix this, please click \texttt{TurboVNC Viewer -> Preferences -> Connection} and change the \texttt{Remote desktop size} to a larger value. This should bring up scroll bars on the bottom and right side of the TurboVNC screen with which you can scroll to see the full display.
+
+Now let's visualize some data!!
+
+\subsubsection{Velodyne's 3D Point Cloud}
+
+In \texttt{rviz}, to add a topic to the display, you need to click on the ``Add'' button on the bottom left. Once you've clicked this, a popup will come up. In the popup, click the ``By topic'' tab and scroll down until you see ``PointCloud2.'' Double-click this and watch the pretty colors appear.
+
+\subsubsection{Raspberry Pi Camera's Image}
+
+Next, follow the same procedure, but this time expand ``/camera\_relay /image /compressed'' and double-click on Image. Wave your hand in front of the camera, this is what the Turtlebot sees in front of it.
+
+\subsubsection{\texttt{gmapping}'s Environment Map}
+
+Next, add ``Map'' under ``/map.'' This is what the mapping package we use provides us from LIDAR data.
+
+\subsubsection{\texttt{gmapping}'s Odometry}
+
+Next, add ``Odometry'' under ``/odom.'' This is what the mapping package we use provides us as the robot's odometry from LIDAR data.
+
+\subsubsection{Coordinate Axes}
+
+Next, add ``Axes'' from under the ``By display type'' tab. This shows us where the world origin point is and the orientation of the axes.
+% for the frame we're visualizing.
+
+\subsubsection{\texttt{tf}'s Transform Tree}
+
+Next, add ``TF'' from under the ``By display type'' tab. This shows us the axes origins and orientations of any other frames we've defined. You can see we've defined quite a few for this robot.
+
+{\bf Problem 2: Take a screenshot of your \texttt{rviz} display after all of the above are running. Feel free to wave to the camera to show it works in real time.}
+
+\subsection{Saving \texttt{rviz}'s Current Configuration}
+
+That was quite a lot of topics to open, imagine doing that every time you wanted to debug your ROS stack! Thankfully, there's a way we can save this current configuration to a file and open it with \texttt{rviz}, using \texttt{File -> Save Config As}. Remember, only the \texttt{catkin\_ws} directory is mapped to your local filesystem, so please save your \texttt{.rviz} file in within \texttt{catkin\_ws} for future use.
+
+{\bf Problem 3: Paste the contents of your created \texttt{.rviz} configuration file into your submission.}
+
+Close and reopen \texttt{rviz}, load the config file you just created so you can see that it reloads all of your previously-opened topics.
+
+\end{document}
