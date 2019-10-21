@@ -74,7 +74,6 @@ Our goals for this section: \begin{enumerate}
 	\item Potentially become familiar with catkin package installation
     \item Become familiar with tools for visualizing information from your robots.
     \item Write a marker using rviz.
-    \item Introduce yourselves to dynamic reconfigure.
 \end{enumerate}
 
 \section{Package Installation}
@@ -157,7 +156,7 @@ On your local machine, whether it be Windows + VM, Mac + Docker, Linux + Docker,
 
 {\bf NOTE:} If you are using Docker, then you will need to use the \texttt{display} flag here, since \texttt{rviz} uses a graphical user interface (GUI). Furthermore, because networking with the robot works differently in docker, we will have to pass in the name of the robot with the \texttt{rosmaster} flag. This also means we don't have to run the \texttt{rostb3.sh} script inside Docker. Specifically, from the \texttt{aa274-docker} directory, you'd run 
 \begin{lstlisting}
-./run.sh --display 1 --rosmaster robotname.local rviz
+./run.sh --display 1 --rosmaster <lowercase_robot_name>.local rviz
 \end{lstlisting}
 After this, connect to your Docker's display with TurboVNC (\texttt{localhost:1} if you used the same number above).
 
@@ -205,5 +204,13 @@ That was quite a lot of topics to open, imagine doing that every time you wanted
 {\bf Problem 3: Paste the contents of your created \texttt{.rviz} configuration file into your submission.}
 
 Close and reopen \texttt{rviz}, load the config file you just created so you can see that it reloads all of your previously-opened topics.
+
+\section{\texttt{rviz} Markers}
+
+Markers are a very helpful tool for visualizing intermediate rewards, computed trajectories, etc. all in \texttt{rviz}! The way markers work is by taking advantage of \texttt{rviz}'s built-in handling of ROS topics and messages. To create a Marker, we'll publish a Marker message to a topic and then view the topic in \texttt{rviz}.
+
+Code to create a Marker object can be found in the \texttt{code/} directory of today's section. Running it creates a green oblong sphere at world coordinates $(1, 1, 1)$, each in meters.
+
+{\bf Problem 4: Change the Marker to look like a normal red sphere and place it $1m$ in front of the robot (think about which axis this corresponds to), include a screenshot of your marker and its placement in your submission.}
 
 \end{document}
