@@ -170,19 +170,23 @@ Now that we have \texttt{rviz} running, let's quickly check that we can actually
 
 Now let's visualize some data!!
 
-\subsubsection{On-Campus Students: Velodyne's 3D Point Cloud}
+\subsubsection{Point Cloud}
+
+\textbf{On-Campus Students: Velodyne's 3D Point Cloud}
 
 In \texttt{rviz}, to add a topic to the display, you need to click on the ``Add'' button on the bottom left. Once you've clicked this, a popup will come up. In the popup, click the ``By topic'' tab and scroll down until you see ``PointCloud2.'' Double-click this and watch the pretty colors appear.
 
-\subsubsection{Off-Campus Students: Gazebo's Laser Scan}
+\textbf{Off-Campus Students: Gazebo's Laser Scan}
 
-In \texttt{rviz}, to add a topic to the display, you need to click on the ``Add'' button on the bottom left. Once you've clicked this, a popup will come up. In the popup, click the ``By topic'' tab and scroll down until you see ``LaserScan`` under ``/scan``. Double-click this and watch the pretty colors appear.
+In \texttt{rviz}, to add a topic to the display, you need to click on the ``Add'' button on the bottom left. Once you've clicked this, a popup will come up. In the popup, click the ``By topic'' tab and scroll down until you see ``LaserScan`` under ``/scan``. Double-click this and watch the scanned points appear.
 
-\subsubsection{On-Campus Students: Raspberry Pi Camera's Image}
+\subsubsection{Camera Image}
+
+\textbf{On-Campus Students: Raspberry Pi Camera's Image}
 
 Next, follow the same procedure, but this time expand ``/camera\_relay /image /compressed'' and double-click on Image. Wave your hand in front of the camera, this is what the Turtlebot sees in front of it.
 
-\subsubsection{Off-Campus Students: Gazebo's Camera Image}
+\textbf{Off-Campus Students: Gazebo's Camera Image}
 
 Next, follow the same procedure, but this time expand ``/camera /image\_raw /compressed'' and double-click on Image. This is a rendered view of the camera attached to the Turtlebot in Gazebo.
 
@@ -203,7 +207,7 @@ Next, add ``Axes'' from under the ``By display type'' tab. This shows us where t
 
 Next, add ``TF'' from under the ``By display type'' tab. This shows us the axes origins and orientations of any other frames we've defined. You can see we've defined quite a few for this robot.
 
-{\bf Problem 2: Take a screenshot of your \texttt{rviz} display after all of the above are running. Feel free to wave to the camera to show it works in real time.}
+{\bf Problem 2: Take a screenshot of your \texttt{rviz} display after all of the above are running. Feel free to wave to the camera to show it works in real time. If you're an SCPD student, teleop the robot (using ``roslaunch turtlebot3\_teleop turtlebot3\_teleop\_key.launch``), to move it to a different place.}
 
 \subsection{Saving \texttt{rviz}'s Current Configuration}
 
