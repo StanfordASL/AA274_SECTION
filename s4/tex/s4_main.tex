@@ -143,7 +143,7 @@ roscore -p $ROS_PORT
 
 In a new terminal tab or window, run the Gazebo environment:
 \begin{lstlisting}
-roslaunch turtlebot3_gazebo turtlebot3_world.launch
+roslaunch asl_turtlebot section4_demo.launch
 \end{lstlisting}
 
 {\bf Problem 1: Once this is all running, which rostopics are available? Paste this list in your submission.}
@@ -170,13 +170,21 @@ Now that we have \texttt{rviz} running, let's quickly check that we can actually
 
 Now let's visualize some data!!
 
-\subsubsection{Velodyne's 3D Point Cloud}
+\subsubsection{On-Campus Students: Velodyne's 3D Point Cloud}
 
 In \texttt{rviz}, to add a topic to the display, you need to click on the ``Add'' button on the bottom left. Once you've clicked this, a popup will come up. In the popup, click the ``By topic'' tab and scroll down until you see ``PointCloud2.'' Double-click this and watch the pretty colors appear.
 
-\subsubsection{Raspberry Pi Camera's Image}
+\subsubsection{Off-Campus Students: Gazebo's Laser Scan}
+
+In \texttt{rviz}, to add a topic to the display, you need to click on the ``Add'' button on the bottom left. Once you've clicked this, a popup will come up. In the popup, click the ``By topic'' tab and scroll down until you see ``LaserScan`` under ``/scan``. Double-click this and watch the pretty colors appear.
+
+\subsubsection{On-Campus Students: Raspberry Pi Camera's Image}
 
 Next, follow the same procedure, but this time expand ``/camera\_relay /image /compressed'' and double-click on Image. Wave your hand in front of the camera, this is what the Turtlebot sees in front of it.
+
+\subsubsection{Off-Campus Students: Gazebo's Camera Image}
+
+Next, follow the same procedure, but this time expand ``/camera /image\_raw /compressed'' and double-click on Image. This is a rendered view of the camera attached to the Turtlebot in Gazebo.
 
 \subsubsection{\texttt{gmapping}'s Environment Map}
 
