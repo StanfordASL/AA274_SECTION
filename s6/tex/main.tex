@@ -1,0 +1,112 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage[pdftex,colorlinks=true, urlcolor = blue]{hyperref}
+\usepackage[margin=3cm]{caption}
+\graphicspath{{../figs/}}
+\usepackage{float}
+
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+
+\newenvironment{claim}[1]{\par\noindent\underline{Claim:}\space#1}{}
+\newenvironment{claimproof}[1]{\par\noindent\underline{Proof:}\space#1}{\hfill $\blacksquare$}
+
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -0.5in \headheight 0.25in \headsep 0.25in
+\textwidth 6.5in \textheight 9in
+\parskip 6pt \parindent 0in \footskip 20pt
+
+% set the header up
+\fancyhead{}
+\fancyhead[L]{Stanford University}
+\fancyhead[R]{Principles of Robot Autonomy I - Fall 2019}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\headrulewidth{0.4pt}
+\setlength\headheight{15pt}
+\input{preamble}
+
+\usepackage{outlines}
+
+\usepackage{gensymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+\newcommand{\ssmargin}[2]{{\color{blue}#1}{\marginpar{\color{blue}\raggedright\scriptsize [SS] #2 \par}}}
+
+\newcommand{\x}{\mathbf{x}}
+
+\setlength{\parindent}{0in}
+
+\title{AA 274A: Principles of Robotic Autonomy I \\Section 6: rosbags}
+\date{}
+
+\setlength{\textfloatsep}{10pt} % Change vertical space after algorithm block
+
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+\vspace{-1.25cm}
+Our goals for this section: 
+\begin{enumerate}
+    \item Finish up things from previous sections
+    \item Learn how to use rosbags
+\end{enumerate}
+
+\section{Updating turtlebot software}
+You may notice that the turtlebots look a little different. We've changed the position of the velodyne to put more weight on the wheels to prevent them from slipping. We've also updated the launch file with the updated position of the velodyne. Let's first make sure your robot has the latest version of the launch file.
+
+As before, ssh into your turtlebot and run the following commands:
+\begin{minted}{bash}
+roscd asl_turtlebot
+git pull
+\end{minted}
+
+\section{Getting the navigator working}
+Before getting into the rosbag stuff, let's make sure your navigator is working. Follow the instructions from last week's section to make sure your robot can navigate from point to point as commanded through rviz.
+
+\section{rosbag}
+An important tool for debugging and programming with ROS is \texttt{rosbag}. This tool allows you to record live data coming in during operation for later playback. Here we'll use it to record performance of the pose controller under different settings to help choose controller gains.
+
+First, edit \texttt{asl\_turtlebot/scripts/controllers/P2\_pose\_stabilization.py} to publish the computed $\alpha$, $\delta$, and $\rho$ values to the topics \texttt{/controller/alpha}, \texttt{/controller/delta}, and \texttt{/controller/rho} topics respectively. 
+
+HINT: you'll need to add some imports to this file. Refer to other publishers you've written in the past!
+
+\textbf{Problem 1: What message type did you choose for these messages? Include your updated code in your submission.}
+
+Next, your goal is to use record to record the $\alpha$, $\delta$, and $\rho$ values as your navigator runs on the robot. Record multiple bags for different values of the controller gains (play with the values at the top of \texttt{navigator.py}).
+
+Take a look at the 
+\texttt{rosbag} tutorials and documentation for guidance:
+\begin{itemize}
+    \item \url{http://wiki.ros.org/rosbag/Commandline}
+    \item \url{http://wiki.ros.org/rosbag/Tutorials/Recording\%20and\%20playing\%20back\%20data}
+\end{itemize}
+
+
+\textbf{Problem 2: What command did you use to record the requested topics to a particular file name?}
+
+\section{Visualizing results with rqt}
+After recording the data, we can play it back and visualize it using a tool called \texttt{rqt\_plot}. First, disconnect from the robot and setup your computer to not use the robot as the ROS master by running \texttt{roslocal} instead of \texttt{rostb3} in your terminals.
+
+Now, in one terminal, start \texttt{roscore}. Then, in another terminal open \texttt{rqt\_plot} and add the three topics that we logged. Finally, in another terminal, use rosbag to playback the data you recorded. 
+
+\textbf{Problem 3: Take a screenshot of the resulting plot in \texttt{rqt\_plot} and include it in your submission.}
+
+You may need to play with the x axis limits to get a nice looking plot.
+
+
+\end{document}

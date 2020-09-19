@@ -1,0 +1,52 @@
+\section*{Problem 3}
+
+In this problem, we will combine your $A^*$ implementation from problem 1 with your turtlebot stack.
+
+IMPORTANT: This problem is a lot more simple if you have already gone through the instructions for the final project (the google slides deck). Importantly, you should be working on a clean copy of the \verb|/project| branch from \verb|asl_turtlebot|.
+
+On the \verb|/project| branch of \verb|asl_turtlebot| (if you are not still already on the project branch - see slide deck on how to create a seperate personal branch before switching), pull the new files.
+
+\begin{lstlisting}
+$ cd ~/catkin_ws/src/asl_turtlebot
+$ git pull
+\end{lstlisting}
+
+A few files will get updated. You will get a working \codeword{supervisor.py}, you will also get a slightly modified \codeword{pose_controller.py}. You will also get new files: \codeword{grids.py} and \codeword{navigator.py} along with some launch files and a new simulation world.
+
+The supervisor we are giving you, along with the navigator, should allow you to do basic path planning and following on your real turtelbots. This should allow you to get started on the project by focusing mainly on the state machine implemtantion (do NOT underestimate the difficulty of this task).
+
+First, take your \codeword{astar.py} and place it in your scripts directory. Next install scipy if you haven't already (\verb|sudo pip install scipy|). Then launch the navigation simulation:
+
+\begin{lstlisting}
+$ roslaunch asl_turtlebot turtlebot3_nav_sim.launch
+\end{lstlisting}
+
+In another terminal run rviz with the provided settings
+
+\begin{lstlisting}
+$ cd ~/catkin_ws/src/asl_turtlebot/rviz
+$ rosrun rviz rviz -d nav.rviz
+\end{lstlisting}
+
+You can now send a goal pose to your turtlebot by clicking \verb|2D Nav Goal| at the top and then clicking on some location on the map.
+
+\begin{enumerate}[label=(\roman*)]
+\item \includegraphics[scale=0.6]{write.png} 
+Take a screenshot of your rviz as the turtlebot is following some interesting path (plotted in green).
+\end{enumerate}
+
+there is also another launch file we are providing you, which runs the same code but that should be used on the real robots instead. The same rviz file (with the waypoints and all) should also work.
+
+\begin{lstlisting}
+$ roslaunch asl_turtlebot turtlebot3_nav.launch
+\end{lstlisting}
+
+Note that the detector is not enabled in these two launch files but that you can uncomment that line when you are ready to detect some stop signs, some dogs or some lame cats (remember: we are giving you a pre-trained neural net that will detect all sorts of things that will all show up as seperate ros topics \url{https://github.com/StanfordASL/asl_turtlebot/blob/project/tfmodels/coco_labels.txt}). The detector is currently returning distances equal to zero no matter how far away from the object you are. It is up to you to figure out how to estimate that distance (hint: the size or vertical position of the box are both pretty decent ideas). 
+
+We expect you to make changes to almost every aspect of this stack, but are giving you a starting point that should work for the most part. The path planner leverages your $A^*$ implementation in an MPC framework along with cubic spline interpolation and the differential flatness controller you know. There are many other ways to move your turtlebot around, be creative!
+
+And yes, for this question, all we wanted to verify is that you were able to run the files for the final project. That's it! 
+
+Be good to one another, and Godspeed.
+
+\newpage

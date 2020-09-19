@@ -15,7 +15,12 @@
 \usepackage{tcolorbox}
 \usepackage{color}
 \definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
-
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
 
 \lstset{%
     % Basic design
@@ -49,7 +54,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand\headrulewidth{0.4pt}
 \setlength\headheight{15pt}
-\input{preamble}
 
 \usepackage{outlines}
 
@@ -64,7 +68,7 @@
 
 \setlength{\parindent}{0in}
 
-\title{AA 274: Principles of Robotic Autonomy \\ Section 1: VM Installation, Git, Python}
+\title{AA 274: Principles of Robotic Autonomy \\ Section 1: OS Setup, Git, Python}
 \date{}
 
 \begin{document}
@@ -73,22 +77,19 @@
 \pagestyle{fancy}
 
 Our goals for this section: \begin{enumerate}
-	\item Install Ubuntu virtual machine locally.
-	\item Learn how to use Git to pull assignments.
-	\item Start working with Python and Numpy.
+    \item Review OS configuration options for the class.
+    \item Learn how to use Git to pull assignments.
+    \item Start working with Python and Numpy.
 \end{enumerate}
 
+\section{OS Setup}
+For this class, we recommend natively installing Python 2.7 on your local operating system. For the first two homeworks, there will be no ROS component and you should be able to develop and test code locally on your machine. For later homeworks, you will be accessing ROS on a server that we've set up for the class.
 
-\section{Virtual Machine Installation}
-For this class, we recommend using a virtual machine (VM) that we provide which has all the
-required software preinstalled.
-Alternatively, you can natively install Linux alongside your normal OS as a dual boot and install the required
-packages yourself. This may give better performance, especially for graphics rendering. However, as there
-can be driver issues and other edge cases that can come up when installing linux on hardware, we can only
-officially support the VM in terms of providing help with your setup.
-To set up the VM on your computer, follow the instructions here: 
+\emph{Windows users: }If you use Windows 10, then please look into using the Windows Linux Subsystem (WSL) option that provides native Linux tools directly on Linux. 
 
-\url{https://github.com/PrinciplesofRobotAutonomy/aa274-docker}
+A second option is to natively install Linux alongside your normal OS as a dual boot. This may give better performance, especially for graphics rendering. % However, as there can be driver issues and other edge cases that can come up when installing Linux on hardware, we can only officially support the VM in terms of providing help with your setup.
+
+As a final option, you can consider installing a Linux virtual machine (VM) using the instructions found  \href{https://docs.google.com/document/d/1ley_pauriyx0PrH8XYfkIrZwXnL3s-xBQvcUY6RE02I/edit#}{here}. Do note that the performance of a VM won't be as snappy or responsive as a dual boot.
 
 \section{Using Git}
 Git is a source control tool that allows us to share code with you. To obtain code for this section, type the following into your terminal:
@@ -96,6 +97,7 @@ Git is a source control tool that allows us to share code with you. To obtain co
  \begin{lstlisting}[escapechar=|]
  git clone https://github.com/PrinciplesofRobotAutonomy/aa274-sections.git
 \end{lstlisting}
+For the sake of time, if you have trouble installing Git locally, then we suggest that you simply download the zip file for the repository off of the same website. By next week's section, please try and have Git installed.
 
 You will use this folder to store all section material for the remainder of the class. So, to update this repo at the start of each section, type: 
 
@@ -103,20 +105,17 @@ You will use this folder to store all section material for the remainder of the 
  git pull
 \end{lstlisting}
 
+
 \section{Python}
 Since our class is composed of students from AA, EE/ME, and CS, we will not assume that you have comprehensive Python knowledge. Therefore, the main purpose of this section is to get your Python coding skills spun up so you can work on the homework. If you know this material already, please help someone who doesn't know it as well.
 
-In order to complete this part of our section, please switch to the scripts included in the code for this section. Remember, in this course we are using Python 2.7. If you do not have Python 2.7 installed on your computer, or would rather not disrupt your existing Python workspace, feel free to use the VM you just installed! You can start up a terminal with
+For this class, we'll be using Python 2.7. To get started, let's start by installing a version of Python 2.7 on your local machine (make sure not to install Python 3.X!) As a further caveat, we also encourage you to setup a \href{https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html}{Conda environment}; Conda allows you to created an ``isolated'' Python environment just for AA 274 without interfering with other versions of Python that you may already have installed.
 
- \begin{lstlisting}
-./run.sh bash
-\end{lstlisting}
+In order to complete this part of our section, please switch to the scripts included in the code for this section.
 
-Alternatively, you can directly launch a Python 2.7 REPL (containing all of the necessary packages) using the following
-
- \begin{lstlisting}
-./run.sh python
-\end{lstlisting}
+%  \begin{lstlisting}
+% ./run.sh python
+% \end{lstlisting}
 
 Once you have had a look through the code, played around with Python a bit, and are aware of the capabilities that Python and its packages offer, complete the following problems:
 {\bf

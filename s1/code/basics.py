@@ -41,15 +41,15 @@ print(truth)
 # For loops
 print("\nFor loops:")
 number_list_one = range(10)
-number_list_two = [i + 1 for i in range(10)]
+number_list_two = [ii + 1 for ii in range(10)]
 
 print_string = ""
 for number in number_list_one:
     print_string += str(number) + " "
 print(print_string)
 
-for i,number in enumerate(number_list_one):
-    print("i: {}, number: {}".format(i, number))
+for ii,number in enumerate(number_list_one):
+    print("ii: {}, number: {}".format(ii, number))
 
 for number_one, number_two in zip(number_list_one,number_list_two):
     print("number_one: {}, number_two: {}".format(number_one, number_two))

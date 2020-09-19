@@ -1,0 +1,136 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[margin=1cm]{caption}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage{color}
+\definecolor{editorGray}{rgb}{0.95, 0.95, 0.95}
+
+
+\lstset{%
+    % Basic design
+    backgroundcolor=\color{editorGray},
+    basicstyle={\small\ttfamily},   
+    frame=l,
+    % Line numbers
+    xleftmargin={0.75cm},
+    numbers=left,
+    stepnumber=1,
+    firstnumber=1,
+    numberfirstline=false,
+    }
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+
+\newenvironment{claim}[1]{\par\noindent\underline{Claim:}\space#1}{}
+\newenvironment{claimproof}[1]{\par\noindent\underline{Proof:}\space#1}{\hfill $\blacksquare$}
+
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -0.5in \headheight 0.25in \headsep 0.25in
+\textwidth 6.5in \textheight 9in
+\parskip 6pt \parindent 0in \footskip 20pt
+
+% set the header up
+\fancyhead{}
+\fancyhead[L]{Stanford Aeronautics \& Astronautics}
+\fancyhead[R]{Fall 2019}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\headrulewidth{0.4pt}
+\setlength\headheight{15pt}
+
+\usepackage{outlines}
+
+\usepackage{xparse}
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{\textcolor{blue}{#1}}%
+}
+\usepackage{gensymb}
+
+\newcommand{\ssmargin}[2]{{\color{blue}#1}{\marginpar{\color{blue}\raggedright\scriptsize [SS] #2 \par}}}
+
+
+\setlength{\parindent}{0in}
+
+\title{AA 274A: Principles of Robot Autonomy I \\ Section 7: ROS Parameters}
+\date{}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+Our goals for this section: \begin{enumerate}
+	\item Learn how to use ROS parameters
+    \item Learn how to dynamically reconfigure node parameters
+    \item Work on any remaining bugs in your robot planners and controllers
+\end{enumerate}
+
+\section{Setting up and using ROS parameters}
+Often there are parameters that are useful across multiple nodes. Such parameters would ideally be shared between nodes to ensure that their values throughout your robot stack are in sync. Additionally, there may be parameters whose values depend on the situation the robot is being launched into, and thus it would not be ideal for them to be hardcoded and modified for each situation. These are some of the reasons for the ROS parameter server.
+
+Before getting started, let’s git pull the latest changes to the \texttt{asl\_turtlebot} package on your machine and on the robot. One thing to note is that we have added publishing of the smoothed trajectory to \texttt{navigator.py} to help with debugging in rviz. You can update your rviz configuration to visualize the planned path at topic \texttt{/planned\_path} and the smoothed path at \texttt{/cmd\_smoothed\_path}, using a different color to distinguish them.
+
+Next, launch the robot stack as described before in Section 5, and then try the following command:
+\begin{lstlisting}
+rosparam list
+\end{lstlisting}
+
+You will see that there are already a large number of parameters on the ROS parameter server. Where exactly are those being set? Open the \texttt{turtlebot3\_bringup\_jetson\_pi.launch} file and you will see that most of the lines are actually setting parameters! Thus, the value of these is set in a launch file and different launch files could be written to initialize these parameters differently for a different task.
+
+We can also use \texttt{rosparam get} to see the current value of parameters from the terminal, providing another way to get information about the current state of your robot stack. Try using this on a few parameters.
+
+\subsection{Creating our first ROS params}
+
+Now let's give ROS params a try for our navigator node. The maximum rotational velocities facts about the robot that are not navigator-specific, and thus they could conceivably be shared across nodes. Modify your custom launch file \texttt{my\_nav.launch} to launch the \texttt{navigator.py} node directly rather than including \texttt{turtlebot3\_nav.launch}. Then make it create parameters \texttt{v\_max} and \texttt{om\_max} within the navigator node namespace and give them the values listed in \texttt{navigator.py}. Next, modify \texttt{navigator.py} to get the value of these parameters from the ROS param server rather than hardcoding them in the script.
+
+\subsection{Parameterizing launch files}
+What if we have another task where we want to run the same stack but with the robot limited to a more conservative speed? One possibility would be to make another copy of \texttt{my\_nav.launch} and change the values of the parameters inside. However, a more elegant and extremely useful solution is to parameterize the launch file itself.
+
+Open \texttt{turtlebot3\_signs\_sim.launch} in \texttt{asl\_turtlebot} and you will notice that it is calling a \texttt{gazebo\_ros} launch file while passing in some arguments. It additionally has some arguments of its own with default values that could be \textit{overridden} if it is called by another launch file that passes in different values for those arguments. As robot stacks become more complex, you can imagine how crucial it is to be able to hierarchically call trees of launch files, using such arguments to repurpose each launch file and ultimately parameters and nodes for the task at hand.
+
+Now using \texttt{turtlebot3\_signs\_sim.launch} as an example, modify \texttt{my\_nav.launch} again to use launch file arguments to set the value of the \texttt{v\_max} and \texttt{om\_max} parameters. Then create a second launch file \texttt{my\_nav\_slow.launch} which calls \texttt{my\_nav.launch} with max velocity values that are at half the speed.
+
+{\bf Problem 1: Test these launch files with your robot (or in sim) and paste the contents of your \texttt{my\_nav.launch} and \texttt{my\_nav\_slow.launch} files into your submission.}
+
+\section{Dynamically reconfiguring node parameters}
+ROS params give a great way to synchronize parameters across your stack on node startup, but what if you want to modify parameters while your nodes are running? There is a \texttt{ros param set} command, but if your nodes only use ROS params to initialize internal node variables and don't continue checking them, updating the ROS params during operation won't result in any changes.
+
+Thankfully, we have another tool called \texttt{dynamic\_reconfigure}. We have already set this up for some parameters in the navigator script. Start the navigator and run
+\begin{lstlisting}
+rosrun dynamic_reconfigure dynparam list
+\end{lstlisting}
+
+You will see that dynamic parameters are set up for the pose controller gains. Use the \texttt{dynparam get} and \texttt{dynparam set} to get the current value of the one of the gains and to set it to a different value (see the \texttt{dynamic\_reconfigure} documentation).
+
+Reconfiguring parameters like this through the command line is quite tedious, so thankfully there is an alternative. Run
+\begin{lstlisting}
+rosrun rqt_reconfigure rqt_reconfigure
+\end{lstlisting}
+
+This will provide an extremely convenient interface for changing your robot's parameters on the fly! Give it a try on the pose controller gains.
+
+\subsection{Setting up dynamic parameters}
+Now let's try extending this to more parameters in our navigator. Unlike normal ROS params, dynamic parameters are created in special \texttt{cfg} files. You can find one for the navigator at \texttt{asl\_turtlebot/cfg/navigator.cfg}. Check the \texttt{dynamic\_reconfigure} tutorials to see what the arguments in the \texttt{gen.add} function mean. Now, add dynamic parameters for the trajectory smoothing parameter, the desired velocity, and any other parameters you would like to change on the fly!
+
+{\bf Problem 2: Test this on your robot (or in sim) and paste the contents of your \texttt{navigator.cfg} and \texttt{navigator.py} files into your submission.}
+\newpage
+
+\section{Tuning and debugging your planners/controllers}
+You now have a large number of tools for tuning and debugging your robot stack! Spend any remaining time practicing using these tools to track down bugs in your planners and controllers and improve the performance of your robot.
+
+If you like, you can also ask a TA to let you test drive your robot without wires inside the small mock-up arena we have set up on the side.
+
+Take note of any inefficiencies in the robot's current stack that might be improved upon by your group during the final project!
+
+\end{document}
